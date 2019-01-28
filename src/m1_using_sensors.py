@@ -3,8 +3,8 @@ This module lets you practice the use of robot sensors.
 
 Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher,
          Mark Hays, Amanda Stouder, Aaron Wilkin, their colleagues,
-         and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         and Alex Hinojosa.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import ev3dev.ev3 as ev3
 import time
@@ -28,7 +28,7 @@ def main():
     # run_test_beep_and_tone()
     # run_test_go_straight_for_seconds()
     # run_test_go_straight_for_inches_using_time()
-    # run_test_go_straight_for_inches_using_sensor()
+    run_test_go_straight_for_inches_using_sensor()
     # run_test_raise_arm()
     # run_test_lower_arm()
     # run_test_go_straight_until_black()
@@ -43,7 +43,7 @@ def run_test_beep_and_tone():
        -- tone method of the ToneMaker class
     """
     # -------------------------------------------------------------------------
-    # TODO: 4.  Implement and test this method.
+    # DONE: 4.  Implement and test this method.
     # -------------------------------------------------------------------------
     # IMPORTANT:
     #   For testing the   beep   method,
@@ -58,6 +58,13 @@ def run_test_beep_and_tone():
     #   Do not forget to apply the   wait   method to tone, as usual.
     # -------------------------------------------------------------------------
 
+    b = Beeper()
+    for k in range(0, 10):
+        b.beep().wait()
+
+    t = ToneMaker()
+    for j in range(0, 10):
+        t.tone(100 + (10 * j), 200).wait()
 
 # -----------------------------------------------------------------------------
 # TODO 5:  With your instructor, do quiz questions XXX through XXX.
@@ -355,8 +362,17 @@ class DriveSystem(object):
         self.go_straight_for_seconds(seconds, speed)
 
     def go_straight_for_inches_using_sensor(self, inches, speed):
-        pass
-        # Live code this with students
+        inches_per_degree = self.left_motor.WheelCircumference / 360
+        self.go(speed, speed)
+        self.left_motor.reset_position()
+        desired_degrees = inches / inches_per_degree
+        distance_gone = (self.left_motor.WheelCircumference) / self.left_motor.get_position()
+        while True:
+            if distance_gone >= inches:
+                self.stop()
+                break
+
+    # Live code this with students
 
     def go_straight_until_black(self, speed):
         """
